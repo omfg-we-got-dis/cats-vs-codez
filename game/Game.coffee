@@ -92,7 +92,7 @@ notLegalToDraw = (locx, locy) ->
     xMouse = Math.floor(locx/50)
     for name, path of branchs
         for index, line of path
-            if xMouse >= line.x and xMouse <= line.x2 and yMouse >= line.y and yMouse <= bra.y2
+            if xMouse >= line.x and xMouse <= line.x2 and yMouse >= line.y and yMouse <= line.y2
                 return true
                 break
 
