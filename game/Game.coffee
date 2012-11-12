@@ -3,17 +3,21 @@ totalLoaded = 0
 manifest = []
 canvas = null
 stage = null
-blah = 124465
 g = new Graphics()
 
 branchs = { 
-            "mainBranch"       : [{x:0, y:10, x2:20, y2:10}] 
-            "secondaryBranch"  : [
-                                  {x:0, y:15, x2:7, y2:15},
-                                  {x:7, y:5, x2:7, y2:16},
-                                  {x:7, y:5, x2:20, y2:5}
-                                 ]
-            "anotherBranch"    : [{x:0, y:2, x2:20, y2:2}]
+            "mainBranch": { 
+                "color":"red"
+                "lines": [{x:0, y:10, x2:20, y2:10}]}
+            "secondaryBranch": {
+                "color":"blue"
+                "lines": [
+                             {x:0, y:15, x2:7, y2:15}
+                            ,{x:7, y:5, x2:7, y2:16}
+                             {x:7, y:5, x2:20, y2:5}]}
+            "anotherBranch": {
+                "color":"orange"
+                "lines": [{x:0, y:2, x2:20, y2:2}]}
           }
 
 init = () -> 
@@ -96,6 +100,8 @@ notLegalToDraw = (locx, locy) ->
                 return true
                 break
 
+    return false
+
 enemyOcupation = (wave) ->
     if wave is 1
         enemies += 1;
@@ -114,12 +120,10 @@ drawSquare = (locx, locy) ->
 drawBranch = () ->
     for name, path of branchs
         for index, line of path
-
             if line.y != line.y2
                 g.setStrokeStyle(50).beginStroke("blue").moveTo(line.x*50 +25, line.y*50).lineTo(line.x2*50+25,line.y2*50)
                 s = new Shape(g)
                 stage.addChild(s)
-                break
             else
                 g.setStrokeStyle(50).beginStroke("blue").moveTo(line.x*50, line.y*50+25).lineTo(line.x2*50, line.y2*50+25)
                 s2 = new Shape(g)
