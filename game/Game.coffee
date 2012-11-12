@@ -3,11 +3,11 @@ totalLoaded = 0
 manifest = []
 canvas = null
 stage = null
-tgrid = new Array()
+towerGrid = new Array()
 for i in [0..19]
-    tgrid[i] = new Array()
+    towerGrid[i] = new Array()
     for j in [0..19]
-        tgrid[i][j] = false
+        towerGrid[i][j] = false
 
 g = new Graphics()
 
@@ -78,21 +78,14 @@ drawGrid = () ->
    
     g.setStrokeStyle(1).beginStroke("black").moveTo(0, 0).lineTo(1000, 0)
     
-
     g.setStrokeStyle(1).beginStroke("black").moveTo(0, 0).lineTo(0, 1000)
-    #s2 = new Shape(g)
-    #stage.addChild(s2)
 
-    while x < 20
+    while x <= 20
         g.setStrokeStyle(1).beginStroke("black").moveTo(0, x*50).lineTo(1000,x*50);
-        #s = new Shape(g)
-        #stage.addChild(s)
         x += 1
 
-    while t < 20
+    while t <= 20
         g.setStrokeStyle(1).beginStroke("black").moveTo(t*50, 0).lineTo(t*50,1000);
-        #d = new Shape(g)
-        #stage.addChild(d)
         t += 1
 
 notLegalToDraw = (locx, locy) ->
@@ -114,21 +107,19 @@ checkSquare = (locx, locy) ->
     yMouse = Math.floor(locy/50)
     xMouse = Math.floor(locx/50)
    
-    if !notLegalToDraw(locx, locy) and !tgrid[xMouse][yMouse]
+    if !notLegalToDraw(locx, locy) and !towerGrid[xMouse][yMouse]
         g.setStrokeStyle(1).beginStroke("yellow").beginFill("yellow").drawRoundRect(xMouse*50, yMouse*50, canvas.width / 20, canvas.height / 20, 0);
-        tgrid[xMouse][yMouse] = true
-        #s = new Shape(g);
-        #stage.addChild(s)
+        towerGrid[xMouse][yMouse] = true
     return true
 
 drawSquares = () ->
     for i in [0..19]
         for j in [0..19]
-            if tgrid[i][j]
+            if towerGrid[i][j]
                 g.setStrokeStyle(1).beginStroke("yellow").beginFill("yellow").drawRoundRect(i*50, j*50, canvas.width / 20, canvas.height / 20, 0);
 
 clearScreen = () ->
-    g.setStrokeStyle(1).beginStroke("White").beginFill("White").drawRect(0,0,canvas.width,canvas.height,0)
+    stage.clear()
 
 
 drawBranch = () ->
@@ -137,15 +128,10 @@ drawBranch = () ->
         for index, line of path.lines
             if line.y != line.y2
                 g.setStrokeStyle(50).beginStroke(color).moveTo(line.x*50 +25, line.y*50).lineTo(line.x2*50+25,line.y2*50)
-                #s = new Shape(g)
-                #stage.addChild(s)
             else
                 g.setStrokeStyle(50).beginStroke(color).moveTo(line.x*50, line.y*50+25).lineTo(line.x2*50, line.y2*50+25)
-                #s2 = new Shape(g)
-                #stage.addChild(s2)
 
 addGameView = () ->
-
     console.log("gamederp")
     stage.update()
      
@@ -156,8 +142,7 @@ resetGame = () ->
     #reset dis shit
 
 tick = () ->
-    #clearScreen()
-    #drawGrid()
+    g.clear
     #drawBranch()
     #drawSquares()
     stage.update()
