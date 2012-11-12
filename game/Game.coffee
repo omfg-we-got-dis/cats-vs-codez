@@ -3,12 +3,8 @@ totalLoaded = 0
 manifest = []
 canvas = null
 stage = null
-<<<<<<< HEAD
-towerGrid = new Array()
-=======
 cuubbeee = {x:0.0,y:10.0}
-tgrid = new Array()
->>>>>>> 6eb16365d966563dc185bc716e60dcd5cb5d6b72
+towerGrid = new Array()
 for i in [0..19]
     towerGrid[i] = new Array()
     for j in [0..19]
@@ -80,14 +76,10 @@ addTitleView = () ->
 drawGrid = () ->
     x = 0
     t = 0
+
     g.setStrokeStyle(1).beginStroke("black").moveTo(0, 0).lineTo(1000, 0)
-<<<<<<< HEAD
-    
     g.setStrokeStyle(1).beginStroke("black").moveTo(0, 0).lineTo(0, 1000)
 
-=======
-    g.setStrokeStyle(1).beginStroke("black").moveTo(0, 0).lineTo(0, 1000)
->>>>>>> 6eb16365d966563dc185bc716e60dcd5cb5d6b72
     while x <= 20
         g.setStrokeStyle(1).beginStroke("black").moveTo(0, x*50).lineTo(1000,x*50);
         x += 1
@@ -114,15 +106,8 @@ enemyOcupation = (wave) ->
 checkSquare = (locx, locy) ->
     yMouse = Math.floor(locy/50)
     xMouse = Math.floor(locx/50)
-<<<<<<< HEAD
-   
-    if !notLegalToDraw(locx, locy) and !towerGrid[xMouse][yMouse]
-        g.setStrokeStyle(1).beginStroke("yellow").beginFill("yellow").drawRoundRect(xMouse*50, yMouse*50, canvas.width / 20, canvas.height / 20, 0);
-        towerGrid[xMouse][yMouse] = true
-=======
     if !notLegalToDraw(locx, locy)
-        tgrid[xMouse][yMouse] = !tgrid[xMouse][yMouse]
->>>>>>> 6eb16365d966563dc185bc716e60dcd5cb5d6b72
+        towerGrid[xMouse][yMouse] = !towerGrid[xMouse][yMouse]
     return true
 
 drawSquares = () ->
@@ -137,28 +122,17 @@ drawSquares = () ->
 
 
 clearScreen = () ->
-<<<<<<< HEAD
-    stage.clear()
-=======
     g.clear()
     g.setStrokeStyle(1).beginStroke("White").beginFill("White").drawRect(0,0,canvas.width,canvas.height,0)
->>>>>>> 6eb16365d966563dc185bc716e60dcd5cb5d6b72
-
 
 drawBranch = () ->
     for name, path of branchs
         color = path.color
         for index, line of path.lines
             if line.y != line.y2
-<<<<<<< HEAD
-                g.setStrokeStyle(50).beginStroke(color).moveTo(line.x*50 +25, line.y*50).lineTo(line.x2*50+25,line.y2*50)
-            else
-                g.setStrokeStyle(50).beginStroke(color).moveTo(line.x*50, line.y*50+25).lineTo(line.x2*50, line.y2*50+25)
-=======
                 g.setStrokeStyle(50).beginStroke(color).moveTo(line.x*50 +25, line.y*50).lineTo(line.x2*50+25,line.y2*50+50)
             else
                 g.setStrokeStyle(50).beginStroke(color).moveTo(line.x*50, line.y*50+25).lineTo(line.x2*50+50, line.y2*50+25)
->>>>>>> 6eb16365d966563dc185bc716e60dcd5cb5d6b72
 
 addGameView = () ->
     console.log("gamederp")
@@ -171,14 +145,8 @@ resetGame = () ->
     #reset dis shit
 
 tick = () ->
-<<<<<<< HEAD
-    g.clear
-    #drawBranch()
-    #drawSquares()
-=======
     clearScreen()
     drawGrid()
     drawBranch()
     drawSquares()
->>>>>>> 6eb16365d966563dc185bc716e60dcd5cb5d6b72
     stage.update()
