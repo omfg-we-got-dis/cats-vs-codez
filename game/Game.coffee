@@ -95,7 +95,8 @@ notLegalToDraw = (locx, locy) ->
     yMouse = Math.floor(locy/50)
     xMouse = Math.floor(locx/50)
     for name, path of branchs
-        for index, line of path
+        lines = path.lines
+        for index, line of lines
             if xMouse >= line.x and xMouse <= line.x2 and yMouse >= line.y and yMouse <= line.y2
                 return true
                 break
@@ -111,7 +112,7 @@ drawSquare = (locx, locy) ->
     xMouse = Math.floor(locx/50)
    
     if !notLegalToDraw(locx, locy)
-        g.setStrokeStyle(1).beginStroke("red").beginFill("red").drawRoundRect(xMouse*50, yMouse*50, canvas.width / 20, canvas.height / 20, 0);
+        g.setStrokeStyle(1).beginStroke("yellow").beginFill("yellow").drawRoundRect(xMouse*50, yMouse*50, canvas.width / 20, canvas.height / 20, 0);
         s = new Shape(g);
         stage.addChild(s)
 
@@ -119,13 +120,15 @@ drawSquare = (locx, locy) ->
 
 drawBranch = () ->
     for name, path of branchs
-        for index, line of path
+        color = path.color
+        lines = path.lines
+        for index, line of lines
             if line.y != line.y2
-                g.setStrokeStyle(50).beginStroke("blue").moveTo(line.x*50 +25, line.y*50).lineTo(line.x2*50+25,line.y2*50)
+                g.setStrokeStyle(50).beginStroke(color).moveTo(line.x*50 +25, line.y*50).lineTo(line.x2*50+25,line.y2*50)
                 s = new Shape(g)
                 stage.addChild(s)
             else
-                g.setStrokeStyle(50).beginStroke("blue").moveTo(line.x*50, line.y*50+25).lineTo(line.x2*50, line.y2*50+25)
+                g.setStrokeStyle(50).beginStroke(color).moveTo(line.x*50, line.y*50+25).lineTo(line.x2*50, line.y2*50+25)
                 s2 = new Shape(g)
                 stage.addChild(s2)
 
