@@ -9,43 +9,21 @@ MenuButton = (function() {
     this.width = width;
     this.height = height;
     this.color = color;
-    this.toChange = false;
-    this.handleClick();
-    this.drawButton();
-    this.tick();
   }
 
   MenuButton.prototype.drawButton = function() {
-    return g.setStrokeStyle(5).beginStroke("black").beginFill("black").drawRect(this.x, this.y, this.width, this.height);
+    return g.setStrokeStyle(5).beginStroke(this.color).beginFill(this.color).drawRect(this.x, this.y, this.width, this.height);
   };
 
-  MenuButton.prototype.handleClick = function() {
-    var mouseX, mouseY;
-    mouseX = stage.mouseX;
-    mouseY = stage.mouseY;
+  MenuButton.prototype.handleClick = function(mouseX, mouseY) {
     if (mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height) {
-      return stage.onMouseDown = this.changeColor;
-    }
-  };
-
-  MenuButton.prototype.changeColor = function() {
-    console.log("shitstorm");
-    return this.toChange = true;
-  };
-
-  MenuButton.prototype.isTrue = function() {
-    if (this.toChange) {
       return true;
     }
     return false;
   };
 
-  MenuButton.prototype.getColor = function() {
-    return this.color;
-  };
-
   MenuButton.prototype.tick = function() {
-    return stage.update();
+    return this.drawButton();
   };
 
   return MenuButton;

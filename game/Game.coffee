@@ -4,7 +4,12 @@ manifest = []
 canvas = null
 stage = null
 theColor = "yellow"
+greenButton = null
+orangeButton = null
+redButton = null
+blueButton = null
 cuubbeee = {x:0.0,y:10.0}
+buttonArray = new Array()
 towerGrid = new Array()
 for i in [0..19]
     towerGrid[i] = new Array()
@@ -47,6 +52,11 @@ init = () ->
     stage.update()
 
 handleClickity = () ->
+    for button in buttonArray
+        if button.handleClick(stage.mouseX, stage.mouseY)
+            theColor = button.color
+            return
+
     checkSquare(stage.mouseX, stage.mouseY)
 
 handleFileLoad = (e) ->
@@ -110,7 +120,7 @@ checkSquare = (locx, locy) ->
     xMouse = Math.floor(locx/50)
 
     if !notLegalToDraw(locx, locy)
-        towerGrid[xMouse][yMouse] = theColor
+        towerGrid[xMouse][yMouse] = if towerGrid[xMouse][yMouse] then 0 else theColor
     return true
 
 
@@ -119,7 +129,7 @@ drawSquares = () ->
         for j in [0..19]
             tg = towerGrid[i][j]
             if tg
-                g.setStrokeStyle(1).beginStroke(tg).beginFill(tg).drawRect(i*50+2, j*50+2, canvas.width / 21.73, canvas.height / 20.73, 0);
+                g.setStrokeStyle(1).beginStroke(tg).beginFill(tg).drawRect(i*50+2, j*50+2, canvas.width / 21.73, canvas.height / 21.73, 0);
     g.setStrokeStyle(1).beginStroke("black").beginFill("black").drawRoundRect(cuubbeee.x*50, cuubbeee.y*50, canvas.width / 24, canvas.height / 24, 0);
     cuubbeee.x += 0.1
     if cuubbeee.x > 20 then cuubbeee.x = 0.0
@@ -143,10 +153,16 @@ addGameView = () ->
     stage.update()
 
 makeButtons = () ->
-  
+    purpleButton = new MenuButton(200, 900, 100,100,"purple")
+    pinkButton = new MenuButton(400, 900,100,100,"pink")
+    yellowButton = new MenuButton(600,900,100,100,"yellow")
+    greyButton = new MenuButton(800,900,100,100,"grey")
+
+    buttonArray = [purpleButton, pinkButton, yellowButton, greyButton]
 
 drawButtons = () ->
-    blah.tick()
+    for button in buttonArray
+        button.tick()
      
 startGame = () ->
     #probably should start the game here
@@ -156,8 +172,8 @@ resetGame = () ->
 
 tick = () ->
     clearScreen()
-    drawButtons()
     drawGrid()
     drawBranch()
+    drawButtons()
     drawSquares()
     stage.update()
