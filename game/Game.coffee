@@ -8,12 +8,13 @@ greenButton = null
 orangeButton = null
 redButton = null
 blueButton = null
-cuubbeee = {x:0.0,y:10.0}
+gridsize = {x:17,y:13}
+cuubbeee = {x:0.0,y:8.0}
 buttonArray = new Array()
 towerGrid = new Array()
-for i in [0..19]
+for i in [0..gridsize.x]
     towerGrid[i] = new Array()
-    for j in [0..19]
+    for j in [0..gridsize.y]
         towerGrid[i][j] = false
 
 g = new Graphics()
@@ -21,16 +22,16 @@ g = new Graphics()
 branchs = { 
             "mainBranch": { 
                 "color":"red"
-                "lines": [{x:0, y:10, x2:19, y2:10}]}
+                "lines": [{x:0, y:8, x2:17, y2:8}]}
             "secondaryBranch": {
                 "color":"blue"
                 "lines": [
-                             {x:0, y:15, x2:6, y2:15}
-                             {x:7, y:5, x2:7, y2:15}
-                             {x:8, y:5, x2:19, y2:5}]}
+                             {x:0, y:13, x2:6, y2:13}
+                             {x:7, y:5, x2:7, y2:13}
+                             {x:8, y:5, x2:17, y2:5}]}
             "anotherBranch": {
                 "color":"orange"
-                "lines": [{x:0, y:2, x2:19, y2:2}]}
+                "lines": [{x:0, y:2, x2:17, y2:2}]}
           }
 
 init = () -> 
@@ -56,7 +57,6 @@ handleClickity = () ->
         if button.handleClick(stage.mouseX, stage.mouseY)
             theColor = button.color
             return
-
     checkSquare(stage.mouseX, stage.mouseY)
 
 handleFileLoad = (e) ->
@@ -88,52 +88,43 @@ addTitleView = () ->
 drawGrid = () ->
     x = 0
     t = 0
-
-    g.setStrokeStyle(1).beginStroke("black").moveTo(0, 0).lineTo(1000, 0)
-    g.setStrokeStyle(1).beginStroke("black").moveTo(0, 0).lineTo(0, 1000)
-
-    while x <= 20
-        g.setStrokeStyle(1).beginStroke("black").moveTo(0, x*50).lineTo(1000,x*50);
+    while x <= gridsize.y+1
+        g.setStrokeStyle(1).beginStroke("black").moveTo(0, x*50).lineTo((gridsize.x+1)*50,x*50);
         x += 1
-
-    while t <= 20
-        g.setStrokeStyle(1).beginStroke("black").moveTo(t*50, 0).lineTo(t*50,1000);
+    while t <= gridsize.x+1
+        g.setStrokeStyle(1).beginStroke("black").moveTo(t*50, 0).lineTo(t*50,(gridsize.y+1)*50);
         t += 1
-
-notLegalToDraw = (locx, locy) ->
-    yMouse = Math.floor(locy/50)
-    xMouse = Math.floor(locx/50)
-    for name, path of branchs
-        for index, line of path.lines
-            if xMouse >= line.x and xMouse <= line.x2 and yMouse >= line.y and yMouse <= line.y2
-                return true
-                break
-
-    return false
 
 enemyOcupation = (wave) ->
     if wave is 1
         enemies += 1;
 
+notLegalToDraw = (xMouse, yMouse) ->
+    if xMouse > gridsize.x || yMouse > gridsize.y
+        return true
+    for name, path of branchs
+        for index, line of path.lines
+            if xMouse >= line.x and xMouse <= line.x2 and yMouse >= line.y and yMouse <= line.y2
+                return true
+                break
+    return false
+
 checkSquare = (locx, locy) ->
     yMouse = Math.floor(locy/50)
     xMouse = Math.floor(locx/50)
-
-    if !notLegalToDraw(locx, locy)
+    if !notLegalToDraw(xMouse, yMouse)
         towerGrid[xMouse][yMouse] = if towerGrid[xMouse][yMouse] then 0 else theColor
     return true
 
-
 drawSquares = () ->
-    for i in [0..19]
-        for j in [0..19]
+    for i in [0..gridsize.x]
+        for j in [0..gridsize.y]
             tg = towerGrid[i][j]
             if tg
-                g.setStrokeStyle(1).beginStroke(tg).beginFill(tg).drawRect(i*50+2, j*50+2, canvas.width / 21.73, canvas.height / 21.73, 0);
-    g.setStrokeStyle(1).beginStroke("black").beginFill("black").drawRoundRect(cuubbeee.x*50, cuubbeee.y*50+5, canvas.width / 24, canvas.height / 24, 0);
+                g.setStrokeStyle(1).beginStroke(tg).beginFill(tg).drawRect(i*50+2, j*50+2, 46, 46, 0);
+    g.setStrokeStyle(1).beginStroke("black").beginFill("black").drawRoundRect(cuubbeee.x*50, cuubbeee.y*50+5, 40, 40, 0);
     cuubbeee.x += 0.1
-    if cuubbeee.x > 20 then cuubbeee.x = 0.0
-
+    if cuubbeee.x > 17 then cuubbeee.x = 0.0
 
 clearScreen = () ->
     g.clear()
@@ -153,10 +144,10 @@ addGameView = () ->
     stage.update()
 
 makeButtons = () ->
-    purpleButton = new MenuButton(200, 900, 100,100,"purple")
-    pinkButton = new MenuButton(400, 900,100,100,"pink")
-    yellowButton = new MenuButton(600,900,100,100,"yellow")
-    greyButton = new MenuButton(800,900,100,100,"grey")
+    purpleButton = new MenuButton(900, 0, 100,100,"purple")
+    pinkButton = new MenuButton(900, 200,100,100,"pink")
+    yellowButton = new MenuButton(900,400,100,100,"yellow")
+    greyButton = new MenuButton(900,600,100,100,"grey")
 
     buttonArray = [purpleButton, pinkButton, yellowButton, greyButton]
 
