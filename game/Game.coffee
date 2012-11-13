@@ -3,6 +3,7 @@ totalLoaded = 0
 manifest = []
 canvas = null
 stage = null
+theColor = "yellow"
 cuubbeee = {x:0.0,y:10.0}
 towerGrid = new Array()
 for i in [0..19]
@@ -35,9 +36,10 @@ init = () ->
 
     stage.mouseEventsEnabled = true
     stage.canvas.onclick = handleClickity
-    
+
     drawGrid()
     drawBranch()
+    makeButtons()
 
     Ticker.setFPS(30)
     Ticker.addListener(this)
@@ -106,19 +108,21 @@ enemyOcupation = (wave) ->
 checkSquare = (locx, locy) ->
     yMouse = Math.floor(locy/50)
     xMouse = Math.floor(locx/50)
+
     if !notLegalToDraw(locx, locy)
-        towerGrid[xMouse][yMouse] = !towerGrid[xMouse][yMouse]
+        towerGrid[xMouse][yMouse] = theColor
     return true
+
 
 drawSquares = () ->
     for i in [0..19]
         for j in [0..19]
-            if towerGrid[i][j]
-                g.setStrokeStyle(1).beginStroke("yellow").beginFill("yellow").drawRoundRect(i*50, j*50, canvas.width / 20, canvas.height / 20, 0);
+            tg = towerGrid[i][j]
+            if tg
+                g.setStrokeStyle(1).beginStroke(tg).beginFill(tg).drawRect(i*50+2, j*50+2, canvas.width / 21.73, canvas.height / 20.73, 0);
     g.setStrokeStyle(1).beginStroke("black").beginFill("black").drawRoundRect(cuubbeee.x*50, cuubbeee.y*50, canvas.width / 24, canvas.height / 24, 0);
     cuubbeee.x += 0.1
     if cuubbeee.x > 20 then cuubbeee.x = 0.0
-
 
 
 clearScreen = () ->
@@ -137,6 +141,12 @@ drawBranch = () ->
 addGameView = () ->
     console.log("gamederp")
     stage.update()
+
+makeButtons = () ->
+  
+
+drawButtons = () ->
+    blah.tick()
      
 startGame = () ->
     #probably should start the game here
@@ -146,6 +156,7 @@ resetGame = () ->
 
 tick = () ->
     clearScreen()
+    drawButtons()
     drawGrid()
     drawBranch()
     drawSquares()

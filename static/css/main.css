@@ -10,3 +10,9 @@ body {
    		-webkit-linear-gradient(top, #2b475f, #172633); 
 
 }
+
+.uiCanvas {
+	z-index: 6;
+	position: absolute;
+	opacity: 1;
+}
