@@ -130,7 +130,7 @@ drawSquares = () ->
             tg = towerGrid[i][j]
             if tg
                 g.setStrokeStyle(1).beginStroke(tg).beginFill(tg).drawRect(i*50+2, j*50+2, canvas.width / 21.73, canvas.height / 21.73, 0);
-    g.setStrokeStyle(1).beginStroke("black").beginFill("black").drawRoundRect(cuubbeee.x*50, cuubbeee.y*50, canvas.width / 24, canvas.height / 24, 0);
+    g.setStrokeStyle(1).beginStroke("black").beginFill("black").drawRoundRect(cuubbeee.x*50, cuubbeee.y*50+5, canvas.width / 24, canvas.height / 24, 0);
     cuubbeee.x += 0.1
     if cuubbeee.x > 20 then cuubbeee.x = 0.0
 

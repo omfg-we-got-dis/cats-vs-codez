@@ -206,7 +206,7 @@ drawSquares = function() {
       }
     }
   }
-  g.setStrokeStyle(1).beginStroke("black").beginFill("black").drawRoundRect(cuubbeee.x * 50, cuubbeee.y * 50, canvas.width / 24, canvas.height / 24, 0);
+  g.setStrokeStyle(1).beginStroke("black").beginFill("black").drawRoundRect(cuubbeee.x * 50, cuubbeee.y * 50 + 5, canvas.width / 24, canvas.height / 24, 0);
   cuubbeee.x += 0.1;
   if (cuubbeee.x > 20) {
     return cuubbeee.x = 0.0;
