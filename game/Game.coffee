@@ -1,23 +1,27 @@
 # CoffeeScrip
 totalLoaded = 0
 manifest = []
+
 canvas = null
 stage = null
+uiCanvas = null
+uiStage = null
+
 theColor = "yellow"
+
 greenButton = null
 orangeButton = null
 redButton = null
 blueButton = null
+
 gridsize = {x:17,y:13}
 cuubbeee = {x:0.0,y:8.0}
+
 buttonArray = new Array()
 towerGrid = new Array()
-for i in [0..gridsize.x]
-    towerGrid[i] = new Array()
-    for j in [0..gridsize.y]
-        towerGrid[i][j] = false
 
 g = new Graphics()
+uiG = new Graphics()
 
 branchs = { 
             "mainBranch": { 
@@ -37,26 +41,47 @@ branchs = {
 init = () -> 
     canvas = document.getElementById('gameCanvas')
     stage = new Stage(canvas)
-    s1 = new Shape(g)
-    stage.addChild(s1)
+    shape = new Shape(g)
+    stage.addChild(shape)
+
+    uiCanvas = document.getElementById('uiCanvas')
+    uiStage = new Stage(uiCanvas)
+    uiShape = new Shape(uiG)
+    uiStage.addChild(uiShape)
 
     stage.mouseEventsEnabled = true
-    stage.canvas.onclick = handleClickity
+    canvas.onclick = handleClickity
 
+    uiStage.mouseEventsEnabled = true
+    uiCanvas.onclick = handleClickity
+
+    fillGrid()
     drawGrid()
     drawBranch()
     makeButtons()
+    drawButtons()
 
     Ticker.setFPS(30)
     Ticker.addListener(this)
 
     stage.update()
 
+fillGrid = () ->
+    for i in [0..gridsize.x]
+        towerGrid[i] = new Array()
+        for j in [0..gridsize.y]
+            towerGrid[i][j] = false
+
 handleClickity = () ->
-    for button in buttonArray
-        if button.handleClick(stage.mouseX, stage.mouseY)
-            theColor = button.color
-            return
+    if uiStage.mouseY > 700
+        for button in buttonArray
+            if button.handleClick(uiStage.mouseX, uiStage.mouseY)
+                if button.color is not "orange"
+                    theColor = button.color
+                    return
+                else
+                    drawNextBranch()
+                    return
     checkSquare(stage.mouseX, stage.mouseY)
 
 handleFileLoad = (e) ->
@@ -78,12 +103,7 @@ handleLoadComplete = (e) ->
         addTitleView()
 
 addTitleView = () ->
-    titleContainer = new Container()
-    titleContainer.add(title, start, options)
-    stage.addChild(titleContainer)
-    stage.addChild(grid)
-    pirateTest.onPress = addGameView
-    stage.update()
+
 
 drawGrid = () ->
     x = 0
@@ -144,12 +164,13 @@ addGameView = () ->
     stage.update()
 
 makeButtons = () ->
-    purpleButton = new MenuButton(900, 0, 100,100,"purple")
-    pinkButton = new MenuButton(900, 200,100,100,"pink")
-    yellowButton = new MenuButton(900,400,100,100,"yellow")
-    greyButton = new MenuButton(900,600,100,100,"grey")
+    purpleButton = new MenuButton(125, 700, 100,100,"purple")
+    pinkButton = new MenuButton(250, 700,100,100,"pink")
+    yellowButton = new MenuButton(375, 700,100,100,"yellow")
+    greyButton = new MenuButton(500,700,100,100,"grey")
+    nextWaveButton = new MenuButton(750, 700, 100, 100, "orange")
 
-    buttonArray = [purpleButton, pinkButton, yellowButton, greyButton]
+    buttonArray = [purpleButton, pinkButton, yellowButton, greyButton, nextWaveButton]
 
 drawButtons = () ->
     for button in buttonArray
@@ -162,9 +183,11 @@ resetGame = () ->
     #reset dis shit
 
 tick = () ->
+    if uiStage
+        uiStage.update()
+
     clearScreen()
     drawGrid()
     drawBranch()
-    drawButtons()
     drawSquares()
     stage.update()

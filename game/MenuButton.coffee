@@ -2,7 +2,7 @@ class MenuButton
 	constructor: (@x, @y, @width, @height, @color) ->
 		
 	drawButton: () ->
-		g.setStrokeStyle(5).beginStroke(@color).beginFill(@color)
+		uiG.setStrokeStyle(5).beginStroke(@color).beginFill(@color)
 			.drawRect(@x, @y, @width, @height)
 
 	handleClick: (mouseX, mouseY) ->
