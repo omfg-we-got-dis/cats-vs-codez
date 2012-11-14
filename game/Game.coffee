@@ -73,15 +73,10 @@ fillGrid = () ->
             towerGrid[i][j] = false
 
 handleClickity = () ->
-    if uiStage.mouseY > 700
-        for button in buttonArray
-            if button.handleClick(uiStage.mouseX, uiStage.mouseY)
-                if button.color is not "orange"
-                    theColor = button.color
-                    return
-                else
-                    drawNextBranch()
-                    return
+    for button in buttonArray
+        if button.handleClick(uiStage.mouseX, uiStage.mouseY)
+                theColor = button.color
+                return
     checkSquare(stage.mouseX, stage.mouseY)
 
 handleFileLoad = (e) ->
@@ -151,14 +146,20 @@ clearScreen = () ->
     g.setStrokeStyle(1).beginStroke("White").beginFill("White").drawRect(0,0,canvas.width,canvas.height,0)
 
 drawBranch = () ->
-    for name, path of branchs
-        color = path.color
-        for index, line of path.lines
-            if line.y != line.y2
-                g.setStrokeStyle(50).beginStroke(color).moveTo(line.x*50 +25, line.y*50).lineTo(line.x2*50+25,line.y2*50+50)
-            else
-                g.setStrokeStyle(50).beginStroke(color).moveTo(line.x*50, line.y*50+25).lineTo(line.x2*50+50, line.y2*50+25)
+    theBranch = branchs["mainBranch"]
+    g.setStrokeStyle(50).beginStroke(theBranch.color).moveTo(theBranch.lines[0].x*50, theBranch.lines[0].y*50+25).lineTo(theBranch.lines[0].x2*50+50, theBranch.lines[0].y2*50+25)
 
+   
+
+drawNextBranch = () ->
+     for name, path of branchs
+            color = path.color
+            for index, line of path.lines
+                if line.y != line.y2
+                    g.setStrokeStyle(50).beginStroke(color).moveTo(line.x*50 +25, line.y*50).lineTo(line.x2*50+25,line.y2*50+50)
+                else
+                    g.setStrokeStyle(50).beginStroke(color).moveTo(line.x*50, line.y*50+25).lineTo(line.x2*50+50, line.y2*50+25)
+    
 addGameView = () ->
     console.log("gamederp")
     stage.update()
