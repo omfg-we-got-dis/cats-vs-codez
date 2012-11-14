@@ -17,7 +17,7 @@ blueButton = null
 activeWave = 0
 
 gridsize = {x:17,y:13}
-cuubbeee = {x:0.0,y:8.0}
+movingCube = {x:0.0,y:8.0}
 
 buttonArray = new Array()
 towerGrid = new Array()
@@ -123,9 +123,9 @@ drawGrid = () ->
         g.setStrokeStyle(1).beginStroke("black").moveTo(t*50, 0).lineTo(t*50,(gridsize.y+1)*50);
         t += 1
 
-enemyOcupation = (wave) ->
-    if wave is 1
-        enemies += 1;
+enemyOcupation = () ->
+    movingCube.x += 0.1
+    if movingCube.x > 17 then movingCube.x = 0.0
 
 notLegalToDraw = (xMouse, yMouse) ->
     if xMouse > gridsize.x || yMouse > gridsize.y
@@ -152,9 +152,7 @@ drawSquares = () ->
             tg = towerGrid[i][j]
             if tg
                 g.setStrokeStyle(1).beginStroke(tg).beginFill(tg).drawRect(i*50+2, j*50+2, 46, 46, 0);
-    g.setStrokeStyle(1).beginStroke("black").beginFill("black").drawRoundRect(cuubbeee.x*50, cuubbeee.y*50+5, 40, 40, 0);
-    cuubbeee.x += 0.1
-    if cuubbeee.x > 17 then cuubbeee.x = 0.0
+    g.setStrokeStyle(1).beginStroke("black").beginFill("black").drawRoundRect(movingCube.x*50, movingCube.y*50+5, 40, 40, 0);
 
 clearScreen = () ->
     g.clear()
@@ -163,8 +161,6 @@ clearScreen = () ->
 drawBranch = () ->
     theBranch = branchs["mainBranch"]
     g.setStrokeStyle(50).beginStroke(theBranch.color).moveTo(theBranch.lines[0].x*50, theBranch.lines[0].y*50+25).lineTo(theBranch.lines[0].x2*50+50, theBranch.lines[0].y2*50+25)
-
-   
 
 drawNextBranch = (wave) ->
     for name, path of branchs
@@ -205,6 +201,7 @@ tick = () ->
         uiStage.update()
 
     clearScreen()
+    enemyOcupation()
     drawGrid()
     drawBranch()
     drawNextBranch(activeWave)
