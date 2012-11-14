@@ -16,6 +16,7 @@ blueButton = null
 
 theLine = 0
 activeWave = 0
+direction = {x:0.1,y:0}
 
 vertical = false
 
@@ -151,17 +152,18 @@ isVertical = (thePath, line) ->
 enemyOcupation = (thePath) ->
     pathToFollow = branchs[thePath].lines
     n = pathToFollow.length
-    if movingCube.x < gridsize.x
-        if movingCube.x 
+    console.log(movingCube.x)
+    movingCube.x += direction.x
+    movingCube.y += direction.y
+    if (movingCube.x == pathToFollow[theLine].x2 and direction.y==0) || (movingCube.y == pathToFollow[theLine].y2 and direction.x==0)
+        console.log("HERP")
+        theLine++
+        newline = pathToFollow[theLine]
+        diffy = (newline.y2-newline.y)
+        diffx = (newline.x2-newline.x)
+        direction.x = (diffx / Math.abs(diffx))/10
+        direction.y = (diffy / Math.abs(diffy))/10
 
-    
-    else
-        movingCube.x = 0.0
-        movingCube.y = 3
-        theLine = 0
-
-   # movingCube.x += 0.1
-   # if movingCube.x > 17 then movingCube.x = 0.0
 
 notLegalToDraw = (xMouse, yMouse) ->
     if xMouse > gridsize.x || yMouse > gridsize.y
