@@ -14,10 +14,13 @@ orangeButton = null
 redButton = null
 blueButton = null
 
+theLine = 0
 activeWave = 0
 
+vertical = false
+
 gridsize = {x:17,y:13}
-movingCube = {x:0.0,y:8.0}
+movingCube = {x:0.0,y:3.0}
 
 buttonArray = new Array()
 towerGrid = new Array()
@@ -28,19 +31,29 @@ uiG = new Graphics()
 branchs = { 
             "mainBranch": { 
                 "color":"red"
-                "activeWave":0
-                "lines": [{x:0, y:8, x2:17, y2:8}]}
+                "activeWave":3
+                "lines": [{x:0, y:6, x2:17, y2:6}]}
             "secondaryBranch": {
                 "color":"blue"
                 "activeWave":1
                 "lines": [
-                             {x:0, y:13, x2:6, y2:13}
+                             {x:0, y:13, x2:7, y2:13}
                              {x:7, y:5, x2:7, y2:13}
                              {x:8, y:5, x2:17, y2:5}]}
             "anotherBranch": {
                 "color":"orange"
                 "activeWave":2
                 "lines": [{x:0, y:2, x2:17, y2:2}]}
+            "reallyWeirdBranch":{
+                "color":"grey"
+                "activeWave":0
+                "lines":[{x:0, y:3, x2:3, y2:3},
+                         {x:3, y:4, x2:3, y2:5},
+                         {x:3, y:5, x2:2, y2:5},
+                         {x:2, y:5, x2:2, y2:8},
+                         {x:2, y:8, x2:10, y2:8},
+                         {x:10, y:8, x2:10, y2:12},
+                         {x:10, y:12, x2: 17, y2:12}]}
           }
 
 init = () -> 
@@ -62,7 +75,6 @@ init = () ->
 
     fillGrid()
     drawGrid()
-    drawBranch()
     makeButtons()
     drawButtons()
     drawNextBranch(2)
@@ -123,9 +135,33 @@ drawGrid = () ->
         g.setStrokeStyle(1).beginStroke("black").moveTo(t*50, 0).lineTo(t*50,(gridsize.y+1)*50);
         t += 1
 
-enemyOcupation = () ->
-    movingCube.x += 0.1
-    if movingCube.x > 17 then movingCube.x = 0.0
+isVertical = (thePath, line) ->
+    pathToFollow = branchs[thePath].lines
+    yOrig = pathToFollow[line].y
+    yNext = pathToFollow[line].y2
+
+
+    if yOrig != yNext
+        console.log("FUCK")
+        return true
+    
+    return false
+    
+                
+enemyOcupation = (thePath) ->
+    pathToFollow = branchs[thePath].lines
+    n = pathToFollow.length
+    if movingCube.x < gridsize.x
+        if movingCube.x 
+
+    
+    else
+        movingCube.x = 0.0
+        movingCube.y = 3
+        theLine = 0
+
+   # movingCube.x += 0.1
+   # if movingCube.x > 17 then movingCube.x = 0.0
 
 notLegalToDraw = (xMouse, yMouse) ->
     if xMouse > gridsize.x || yMouse > gridsize.y
@@ -157,10 +193,6 @@ drawSquares = () ->
 clearScreen = () ->
     g.clear()
     g.setStrokeStyle(1).beginStroke("White").beginFill("White").drawRect(0,0,canvas.width,canvas.height,0)
-
-drawBranch = () ->
-    theBranch = branchs["mainBranch"]
-    g.setStrokeStyle(50).beginStroke(theBranch.color).moveTo(theBranch.lines[0].x*50, theBranch.lines[0].y*50+25).lineTo(theBranch.lines[0].x2*50+50, theBranch.lines[0].y2*50+25)
 
 drawNextBranch = (wave) ->
     for name, path of branchs
@@ -201,9 +233,8 @@ tick = () ->
         uiStage.update()
 
     clearScreen()
-    enemyOcupation()
+    enemyOcupation("reallyWeirdBranch")
     drawGrid()
-    drawBranch()
     drawNextBranch(activeWave)
     drawSquares()
     stage.update()
