@@ -14,6 +14,8 @@ orangeButton = null
 redButton = null
 blueButton = null
 
+activeWave = 0
+
 gridsize = {x:17,y:13}
 cuubbeee = {x:0.0,y:8.0}
 
@@ -26,15 +28,18 @@ uiG = new Graphics()
 branchs = { 
             "mainBranch": { 
                 "color":"red"
+                "activeWave":0
                 "lines": [{x:0, y:8, x2:17, y2:8}]}
             "secondaryBranch": {
                 "color":"blue"
+                "activeWave":1
                 "lines": [
                              {x:0, y:13, x2:6, y2:13}
                              {x:7, y:5, x2:7, y2:13}
                              {x:8, y:5, x2:17, y2:5}]}
             "anotherBranch": {
                 "color":"orange"
+                "activeWave":2
                 "lines": [{x:0, y:2, x2:17, y2:2}]}
           }
 
@@ -60,6 +65,7 @@ init = () ->
     drawBranch()
     makeButtons()
     drawButtons()
+    drawNextBranch(2)
 
     Ticker.setFPS(30)
     Ticker.addListener(this)
@@ -75,8 +81,15 @@ fillGrid = () ->
 handleClickity = () ->
     for button in buttonArray
         if button.handleClick(uiStage.mouseX, uiStage.mouseY)
-                theColor = button.color
-                return
+                if button.color is "orange"
+                    if activeWave <= 2
+                        console.log("orange")
+                        activeWave += 1
+                        drawNextBranch(activeWave)
+                    return
+                else
+                    theColor = button.color
+                    return
     checkSquare(stage.mouseX, stage.mouseY)
 
 handleFileLoad = (e) ->
@@ -118,10 +131,12 @@ notLegalToDraw = (xMouse, yMouse) ->
     if xMouse > gridsize.x || yMouse > gridsize.y
         return true
     for name, path of branchs
-        for index, line of path.lines
-            if xMouse >= line.x and xMouse <= line.x2 and yMouse >= line.y and yMouse <= line.y2
-                return true
-                break
+        active = path.activeWave
+        if active <= activeWave
+            for index, line of path.lines
+                if xMouse >= line.x and xMouse <= line.x2 and yMouse >= line.y and yMouse <= line.y2
+                    return true
+                    break
     return false
 
 checkSquare = (locx, locy) ->
@@ -151,9 +166,11 @@ drawBranch = () ->
 
    
 
-drawNextBranch = () ->
-     for name, path of branchs
-            color = path.color
+drawNextBranch = (wave) ->
+    for name, path of branchs
+        color = path.color
+        active = path.activeWave
+        if active <= wave
             for index, line of path.lines
                 if line.y != line.y2
                     g.setStrokeStyle(50).beginStroke(color).moveTo(line.x*50 +25, line.y*50).lineTo(line.x2*50+25,line.y2*50+50)
@@ -190,5 +207,6 @@ tick = () ->
     clearScreen()
     drawGrid()
     drawBranch()
+    drawNextBranch(activeWave)
     drawSquares()
     stage.update()
