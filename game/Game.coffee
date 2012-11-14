@@ -39,8 +39,8 @@ branchs = {
                 "activeWave":1
                 "lines": [
                              {x:0, y:13, x2:7, y2:13}
-                             {x:7, y:5, x2:7, y2:13}
-                             {x:8, y:5, x2:17, y2:5}]}
+                             {x:7, y:13, x2:7, y2:5}
+                             {x:7, y:5, x2:17, y2:5}]}
             "anotherBranch": {
                 "color":"orange"
                 "activeWave":2
@@ -135,34 +135,26 @@ drawGrid = () ->
     while t <= gridsize.x+1
         g.setStrokeStyle(1).beginStroke("black").moveTo(t*50, 0).lineTo(t*50,(gridsize.y+1)*50);
         t += 1
-
-isVertical = (thePath, line) ->
-    pathToFollow = branchs[thePath].lines
-    yOrig = pathToFollow[line].y
-    yNext = pathToFollow[line].y2
-
-
-    if yOrig != yNext
-        console.log("FUCK")
-        return true
-    
-    return false
-    
-                
+       
 enemyOcupation = (thePath) ->
     pathToFollow = branchs[thePath].lines
     n = pathToFollow.length
-    console.log(movingCube.x)
     movingCube.x += direction.x
     movingCube.y += direction.y
-    if (movingCube.x == pathToFollow[theLine].x2 and direction.y==0) || (movingCube.y == pathToFollow[theLine].y2 and direction.x==0)
+    if (movingCube.x >= pathToFollow[theLine].x2-0.01 and movingCube.x <= pathToFollow[theLine].x2+0.01 and direction.y==0) || (movingCube.y >= pathToFollow[theLine].y2-0.01 and movingCube.y <= pathToFollow[theLine].y2+0.01 and direction.x==0)
         console.log("HERP")
-        theLine++
+        theLine += 1
         newline = pathToFollow[theLine]
         diffy = (newline.y2-newline.y)
         diffx = (newline.x2-newline.x)
-        direction.x = (diffx / Math.abs(diffx))/10
-        direction.y = (diffy / Math.abs(diffy))/10
+        if diffx == 0
+            direction.x = 0
+        else 
+            direction.x = (diffx / Math.abs(diffx))/10
+        if diffy == 0
+            direction.y = 0
+        else
+            direction.y = (diffy / Math.abs(diffy))/10
 
 
 notLegalToDraw = (xMouse, yMouse) ->

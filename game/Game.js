@@ -1,4 +1,4 @@
-var activeWave, addGameView, addTitleView, blueButton, branchs, buttonArray, canvas, checkSquare, clearScreen, direction, drawButtons, drawGrid, drawNextBranch, drawSquares, enemyOcupation, fillGrid, g, greenButton, gridsize, handleClickity, handleFileLoad, handleLoadComplete, init, isVertical, makeButtons, manifest, movingCube, notLegalToDraw, orangeButton, redButton, resetGame, stage, startGame, theColor, theLine, tick, totalLoaded, towerGrid, uiCanvas, uiG, uiStage, vertical;
+var activeWave, addGameView, addTitleView, blueButton, branchs, buttonArray, canvas, checkSquare, clearScreen, direction, drawButtons, drawGrid, drawNextBranch, drawSquares, enemyOcupation, fillGrid, g, greenButton, gridsize, handleClickity, handleFileLoad, handleLoadComplete, init, makeButtons, manifest, movingCube, notLegalToDraw, orangeButton, redButton, resetGame, stage, startGame, theColor, theLine, tick, totalLoaded, towerGrid, uiCanvas, uiG, uiStage, vertical;
 totalLoaded = 0;
 manifest = [];
 canvas = null;
@@ -53,11 +53,11 @@ branchs = {
         y2: 13
       }, {
         x: 7,
-        y: 5,
+        y: 13,
         x2: 7,
-        y2: 13
+        y2: 5
       }, {
-        x: 8,
+        x: 7,
         y: 5,
         x2: 17,
         y2: 5
@@ -215,32 +215,28 @@ drawGrid = function() {
   }
   return _results;
 };
-isVertical = function(thePath, line) {
-  var pathToFollow, yNext, yOrig;
-  pathToFollow = branchs[thePath].lines;
-  yOrig = pathToFollow[line].y;
-  yNext = pathToFollow[line].y2;
-  if (yOrig !== yNext) {
-    console.log("FUCK");
-    return true;
-  }
-  return false;
-};
 enemyOcupation = function(thePath) {
   var diffx, diffy, n, newline, pathToFollow;
   pathToFollow = branchs[thePath].lines;
   n = pathToFollow.length;
-  console.log(movingCube.x);
   movingCube.x += direction.x;
   movingCube.y += direction.y;
-  if ((movingCube.x === pathToFollow[theLine].x2 && direction.y === 0) || (movingCube.y === pathToFollow[theLine].y2 && direction.x === 0)) {
+  if ((movingCube.x >= pathToFollow[theLine].x2 - 0.01 && movingCube.x <= pathToFollow[theLine].x2 + 0.01 && direction.y === 0) || (movingCube.y >= pathToFollow[theLine].y2 - 0.01 && movingCube.y <= pathToFollow[theLine].y2 + 0.01 && direction.x === 0)) {
     console.log("HERP");
-    theLine++;
+    theLine += 1;
     newline = pathToFollow[theLine];
     diffy = newline.y2 - newline.y;
     diffx = newline.x2 - newline.x;
-    direction.x = (diffx / Math.abs(diffx)) / 10;
-    return direction.y = (diffy / Math.abs(diffy)) / 10;
+    if (diffx === 0) {
+      direction.x = 0;
+    } else {
+      direction.x = (diffx / Math.abs(diffx)) / 10;
+    }
+    if (diffy === 0) {
+      return direction.y = 0;
+    } else {
+      return direction.y = (diffy / Math.abs(diffy)) / 10;
+    }
   }
 };
 notLegalToDraw = function(xMouse, yMouse) {
